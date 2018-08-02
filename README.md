@@ -1,10 +1,17 @@
 # pokepastebin
 ###### Paste() object for scraping and organizing pokemon teams from pastebin.com
 
-### How to Use:
+### How to Use (Python 3):
 ```python
 from paste import Paste
-obj = Paste("http://pastebin.com/5AcrDVnB", "Rob")
+sampleteam = Paste("http://pastebin.com/5AcrDVnB", "Rob")
+
+print(sampleteam.author)
+print(sampleteam.id)
+print(sampleteam.sixmons)
+print(sampleteam.open())
+
+copy = Paste.read(sampleteam.dump())
 #excuse my 1AM team
 ```
 ### IMPORTANT:

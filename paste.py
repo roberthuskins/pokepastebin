@@ -5,26 +5,21 @@ pokefile = open("pokemon.txt",'r')
 POKEMON = pokefile.read().splitlines()
 pokefile.close()
 
-#should use regex in the future, however these two strings allow selection of just the pokemon in a raw pastebin
-BEGIN_OF_RAW_TEXT = '<textarea id="paste_code" class="paste_code" name="paste_code" onkeydown="return catchtab(this,event)">'
-BEGIN_OF_RAW_TEXT_LENGTH = len(BEGIN_OF_RAW_TEXT)
-END_OF_RAW_TEXT="</textarea>"
-
 class Paste():
     def __init__(self, url, author, sixmons = []):
-            raw = self.open_paste_from_url(url).lower()
+
+            if ("://pastebin.com/") not in url or ("/raw" in url) or ("http" not in url or "##" in author):
+                raise ValueError("Url not in correct format")
+            else:
+                id = url[url.index("com/") + 4:].replace("/","")
+                self.id = id;
+                raw = self.open_paste_from_url("https://pastebin.com/raw/" + id).lower()
 
             #normally you do not specify sixmons, however if you are reading a dump you put it in the args to save time
             if sixmons == []:
                 for mon in POKEMON:
                     if mon + " @" in raw or mon + "-" in raw or mon + " (" in raw:
                         sixmons.append(mon)
-            if ("://pastebin.com/") not in url or ("/raw" in url) or ("http" not in url or "##" in author):
-                raise ValueError("Url not in correct format")
-            else:
-                self.id = url[url.index("com/") + 4:].replace("/","")
-            if "##" in author:
-
             self.author = author
             self.sixmons = sixmons
 
@@ -33,7 +28,10 @@ class Paste():
     def open_paste_from_url(url):
         request = urllib.request.urlopen(url)
         request_str = request.read().decode("utf8")
-        return request_str[request_str.index(BEGIN_OF_RAW_TEXT)+BEGIN_OF_RAW_TEXT_LENGTH:request_str.index(END_OF_RAW_TEXT)]
+        return request_str
+
+    def open(self):
+        return self.open_paste_from_url("https://pastebin.com/raw/" + self.id)
 
     #returns a new Paste object from a string formatted below
     @staticmethod
