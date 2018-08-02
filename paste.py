@@ -17,7 +17,7 @@ class Paste():
             #normally you do not specify sixmons, however if you are reading a dump you put it in the args to save time
             if sixmons == []:
                 for mon in POKEMON:
-                    if mon + " @" in raw or mon + "-" in raw:
+                    if mon + " @" in raw or mon + "-" in raw or mon + " (" in raw:
                         sixmons.append(mon)
             if ("://pastebin.com/") not in url or ("/raw" in url) or ("http" not in url or "##" in author):
                 raise ValueError("Url not in correct format")
