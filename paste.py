@@ -30,14 +30,17 @@ class Paste():
         request = urllib.request.urlopen(url)
         request_str = request.read().decode("utf8")
         return request_str
-
+    
+    #returns the raw text 
     def open(self):
         return self.open_paste_from_url("https://pastebin.com/raw/" + self.id)
-
+    
+    #dumps self to json string for use in serialization
     def dump_to_json(self):
-        dict = {"id" : self.id, "author" : self.author, "sixmons" : self.sixmons}
-        return json.dumps(dict)
-
+        dump = {"id" : self.id, "author" : self.author, "sixmons" : self.sixmons}
+        return json.dumps(dump)
+    
+    #returns a new Paste object from a json string
     @staticmethod
     def read_from_json(jsonstr):
         parsed_json = json.loads(jsonstr)
