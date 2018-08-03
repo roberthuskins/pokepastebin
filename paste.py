@@ -1,4 +1,5 @@
 import urllib.request
+import json
 
 #loads all pokemon into one array to check against later
 pokefile = open("pokemon.txt",'r')
@@ -33,23 +34,18 @@ class Paste():
     def open(self):
         return self.open_paste_from_url("https://pastebin.com/raw/" + self.id)
 
-    #returns a new Paste object from a string formatted below
-    @staticmethod
-    def read(dump):
-        arr = dump.split("##")
-        return Paste(url = "https://pastebin.com/" + arr[0], author = arr[1], sixmons = arr[2:])
+    def dump_to_json(self):
+        dict = {"id" : self.id, "author" : self.author, "sixmons" : self.sixmons}
+        return json.dumps(dict)
 
-    #dumps the object into a string that can be turned back into a Paste object
-    def dump(self):
-        output = self.id + "##" + self.author + "##"
-        for mon in self.sixmons:
-            output += mon + "##"
-        return output[:len(output)-2]
+    @staticmethod
+    def read_from_json(jsonstr):
+        parsed_json = json.loads(jsonstr)
+
+        return Paste(url = "http://pastebin.com/" + parsed_json["id"], author = parsed_json["author"], sixmons = parsed_json["sixmons"])
 
     def __str__(self):
         output = ""
         for mon in self.sixmons:
             output += mon.title() + " / "
         return output[:len(output)-1] + "\nBy: {}".format(self.author)
-
-#sampleteam = Paste("http://pastebin.com/5AcrDVnB", "rob")

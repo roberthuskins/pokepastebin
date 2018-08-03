@@ -10,8 +10,7 @@ print(sampleteam.author)
 print(sampleteam.id)
 print(sampleteam.sixmons)
 print(sampleteam.open())
-
-copy = Paste.read(sampleteam.dump())
+print(sampleteam.dump_to_json())
 #excuse my 1AM team
 ```
 ### IMPORTANT:
